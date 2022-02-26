@@ -6,23 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 public class AuthService {
 
     @Autowired
     private AuthClient authClient;
 
-    public AuthenticationDto createToken(String userId, HttpHeaders headers) {
+    public AuthenticationDto createToken(String userId) {
         try {
-            return authClient.createToken(userId, headers);
+            return authClient.createToken(userId);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
     }
 
-    public AuthenticationDto validateToken(String userId, HttpHeaders headers) {
+    public AuthenticationDto validateToken(String userId, HttpServletRequest headers) {
         try {
-            return authClient.validateToken(userId, headers);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(HttpHeaders.AUTHORIZATION, headers.getHeader(HttpHeaders.AUTHORIZATION));
+            return authClient.validateToken(userId, httpHeaders);
         }catch (Exception e){
             throw new RuntimeException(e);
         }

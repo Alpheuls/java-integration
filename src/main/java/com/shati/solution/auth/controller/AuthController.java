@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -17,10 +19,10 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<String> createToken(@PathVariable String userId, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<String> createToken(@PathVariable String userId, HttpServletRequest headers) {
         AuthenticationDto authenticationDto = new AuthenticationDto();
         try {
-            authenticationDto = authService.createToken(userId, headers);
+            authenticationDto = authService.createToken(userId);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add("access_token", authenticationDto.getAuthToken());
             return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body("Ok");
@@ -30,7 +32,7 @@ public class AuthController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<String> validateToken(@PathVariable String userId,@RequestHeader HttpHeaders headers) {
+    public ResponseEntity<String> validateToken(@PathVariable String userId, HttpServletRequest headers) {
         AuthenticationDto authenticationDto = new AuthenticationDto();
         try {
             authenticationDto = authService.validateToken(userId, headers);
