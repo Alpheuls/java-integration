@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name = "authIntegration",
-url = "http://api.shati-solution.org/solution-api-authentication",
+url = "http://api-authentication:8080/solution-api-authentication",
 path = "/auth")
 public interface AuthClient {
 
